@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" fill="none">
+  <!-- Car body - sleek sedan silhouette -->
+  <path d="M30 72 C30 72 42 42 70 38 C85 36 100 34 120 38 C140 42 158 52 168 62 L172 68 C174 72 172 76 168 76 L32 76 C28 76 28 74 30 72Z" fill="#1a1a2e"/>
+  <!-- Car roof / windshield -->
+  <path d="M62 42 C62 42 72 28 95 26 C118 28 130 36 134 42 L140 52 L56 52 Z" fill="#1a1a2e"/>
+  <!-- Window glass -->
+  <path d="M68 44 C68 44 76 32 95 30 C108 31 116 36 120 42 L96 42 Z" fill="#00bcd4" opacity="0.3"/>
+  <path d="M100 42 L124 42 L134 50 L60 50 L68 44 Z" fill="#00bcd4" opacity="0.15"/>
+  <!-- Front wheel -->
+  <circle cx="55" cy="76" r="14" fill="#1a1a2e"/>
+  <circle cx="55" cy="76" r="7" fill="#f0f4f8"/>
+  <circle cx="55" cy="76" r="3" fill="#1a1a2e"/>
+  <!-- Rear wheel -->
+  <circle cx="145" cy="76" r="14" fill="#1a1a2e"/>
+  <circle cx="145" cy="76" r="7" fill="#f0f4f8"/>
+  <circle cx="145" cy="76" r="3" fill="#1a1a2e"/>
+  <!-- Body highlight line -->
+  <path d="M46 64 C60 60 120 58 165 64" stroke="#00bcd4" stroke-width="1.5" opacity="0.5" fill="none"/>
+  <!-- Water splash under car -->
+  <path d="M25 86 C35 80 50 84 60 80 C70 76 85 82 100 78 C115 74 130 80 145 78 C155 76 168 82 178 86" stroke="#00bcd4" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.7"/>
+  <path d="M35 94 C48 88 58 92 72 88 C86 84 100 90 115 86 C128 82 140 88 155 86 C165 84 172 90 175 94" stroke="#00bcd4" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.4"/>
+  <!-- Water droplets -->
+  <circle cx="38" cy="82" r="2.5" fill="#00bcd4" opacity="0.6"/>
+  <circle cx="48" cy="90" r="2" fill="#00bcd4" opacity="0.5"/>
+  <circle cx="160" cy="84" r="2" fill="#00bcd4" opacity="0.6"/>
+  <circle cx="170" cy="90" r="1.8" fill="#00bcd4" opacity="0.4"/>
+  <!-- Sparkle stars -->
+  <path d="M155 30 L157 36 L163 38 L157 40 L155 46 L153 40 L147 38 L153 36 Z" fill="#00bcd4" opacity="0.8"/>
+  <path d="M170 44 L171 48 L175 49 L171 50 L170 54 L169 50 L165 49 L169 48 Z" fill="#00bcd4" opacity="0.5"/>
+  <path d="M40 32 L41 35 L44 36 L41 37 L40 40 L39 37 L36 36 L39 35 Z" fill="#00bcd4" opacity="0.45"/>
+</svg>
