@@ -160,8 +160,8 @@
       }, 1200);
     }
 
-    // Proceed — validate all fields
-    function handleProceed() {
+    // Proceed — validate all fields and register user
+    async function handleProceed() {
       var fullName = document.getElementById('full-name').value.trim();
       var phoneDigits = phoneInput.value.replace(/[^0-9]/g, '');
       var address = document.getElementById('address').value.trim();
@@ -179,7 +179,47 @@
         return;
       }
 
-      window.location.href = 'dashboard.html';
+      var phoneNumber = '+91' + phoneDigits;
+
+      // Save to localStorage for dashboard use
+      localStorage.setItem('sg_user_name', fullName);
+      localStorage.setItem('sg_user_phone', phoneNumber);
+      localStorage.setItem('sg_user_address', address);
+
+      // Register user in Supabase via Flask API
+      var btn = document.getElementById('btn-proceed');
+      btn.textContent = 'Saving…';
+      btn.disabled = true;
+
+      try {
+        var response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            full_name: fullName,
+            phone_number: phoneNumber,
+            address: address
+          })
+        });
+
+        var result = await response.json();
+
+        if (!response.ok) {
+          alert('Registration failed: ' + result.error);
+          btn.textContent = 'Proceed →';
+          btn.disabled = false;
+          return;
+        }
+
+        console.log('User registered:', result);
+        window.location.href = '/dashboard';
+
+      } catch (err) {
+        console.error('Network error:', err);
+        alert('Could not connect to server. Make sure Flask is running.');
+        btn.textContent = 'Proceed →';
+        btn.disabled = false;
+      }
     }
 
     // Show toast
