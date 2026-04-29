@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SaafGaadi — Dashboard</title>
+  <meta name="description" content="SaafGaadi dashboard — manage your car cleaning services, view plans, and track your daily washes." />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+
+      <!-- Brand -->
+      <a href="index.html" class="navbar-brand">
+        <img class="navbar-logo" src="logo.svg" alt="SaafGaadi logo" />
+        <span class="navbar-name">
+          <span class="name-saaf">Saaf</span><span class="name-gaadi">Gaadi</span>
+        </span>
+      </a>
+
+      <!-- User -->
+      <div class="navbar-user">
+        <span class="navbar-greeting">Welcome back!</span>
+        <div class="navbar-avatar" id="user-avatar">U</div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Tab Bar -->
+  <div class="tabs" id="tab-bar">
+    <div class="tabs-inner">
+      <button class="tab-btn active" data-tab="services" id="tab-services">
+        ⚡ Services
+      </button>
+      <button class="tab-btn" data-tab="your-services" id="tab-your-services">
+        📋 Your Services
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- Panel 1: Services -->
+    <section class="tab-panel active" id="panel-services">
+      <p class="section-title">Explore <span>Services</span></p>
+
+      <div class="card-grid">
+
+        <!-- Daily Car Wash Plans -->
+        <div class="card" id="card-daily-plans">
+          <div class="card-icon">🗓️</div>
+          <h2 class="card-title">Daily Car Wash Plans</h2>
+          <p class="card-desc">
+            Subscribe to a daily plan and wake up to a sparkling car every single morning. Choose from weekly, bi-weekly, or monthly packages.
+          </p>
+          <a href="#" class="card-btn" id="btn-view-daily">View →</a>
+        </div>
+
+        <!-- Quick Car Wash -->
+        <div class="card" id="card-quick-wash">
+          <div class="card-icon">💧</div>
+          <h2 class="card-title">Quick Car Wash</h2>
+          <p class="card-desc">
+            Need a one-time wash right now? Book an on-demand cleaning session and our expert cleaner arrives at your doorstep within minutes.
+          </p>
+          <a href="#" class="card-btn" id="btn-view-quick">View →</a>
+        </div>
+
+        <!-- Nearby Washing Service Center -->
+        <div class="card" id="card-nearby">
+          <div class="card-icon">📍</div>
+          <h2 class="card-title">Nearby Washing Service Center</h2>
+          <p class="card-desc">
+            Prefer dropping off your car? Locate the nearest SaafGaadi partner centers on the map with live wait-time estimates.
+          </p>
+          <a href="#" class="card-btn" id="btn-view-nearby">View →</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Panel 2: Your Services -->
+    <section class="tab-panel" id="panel-your-services">
+      <p class="section-title">Manage <span>Your Services</span></p>
+
+      <div class="card-grid">
+
+        <!-- Upgrade Your Plan -->
+        <div class="card" id="card-upgrade">
+          <div class="card-icon">🚀</div>
+          <h2 class="card-title">Upgrade Your Plan</h2>
+          <p class="card-desc">
+            Unlock premium perks — interior detailing, tyre shine, and priority scheduling. Compare plans and upgrade instantly.
+          </p>
+          <a href="#" class="card-btn" id="btn-view-upgrade">View →</a>
+        </div>
+
+        <!-- Daily Live Photo -->
+        <div class="card" id="card-live-photo">
+          <div class="card-icon">📸</div>
+          <h2 class="card-title">Daily Live Photo of Car Cleaning</h2>
+          <p class="card-desc">
+            Get a verified before-and-after photo every time your car is cleaned. Full transparency, zero guesswork.
+          </p>
+          <a href="#" class="card-btn" id="btn-view-photo">View →</a>
+        </div>
+
+        <!-- Attendance Section -->
+        <div class="card" id="card-attendance">
+          <div class="card-icon">✅</div>
+          <h2 class="card-title">Attendance Section</h2>
+          <p class="card-desc">
+            Track your cleaner's daily attendance log. See which days your car was serviced and flag any missed sessions.
+          </p>
+          <a href="#" class="card-btn" id="btn-view-attendance">View →</a>
+        </div>
+
+        <!-- Cleaner Details -->
+        <div class="card" id="card-cleaner">
+          <div class="card-icon">🧑‍🔧</div>
+          <h2 class="card-title">Cleaner Details</h2>
+          <p class="card-desc">
+            View your assigned cleaner's profile — name, rating, experience, and contact info. Rate their service or request a change.
+          </p>
+          <a href="#" class="card-btn" id="btn-view-cleaner">View →</a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Tab Switching -->
+  <script>
+    var tabButtons = document.querySelectorAll('.tab-btn');
+    var tabPanels = document.querySelectorAll('.tab-panel');
+
+    for (var i = 0; i < tabButtons.length; i++) {
+      tabButtons[i].addEventListener('click', function() {
+        var target = this.getAttribute('data-tab');
+
+        // Deactivate all
+        for (var j = 0; j < tabButtons.length; j++) {
+          tabButtons[j].classList.remove('active');
+        }
+        for (var k = 0; k < tabPanels.length; k++) {
+          tabPanels[k].classList.remove('active');
+        }
+
+        // Activate selected
+        this.classList.add('active');
+        document.getElementById('panel-' + target).classList.add('active');
+      });
+    }
+  </script>
+
+</body>
+</html>
