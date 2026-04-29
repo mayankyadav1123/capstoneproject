@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SaafGaadi — Premium Car Care at Your Doorstep</title>
+  <meta name="description"
+    content="SaafGaadi brings premium, door-to-door car cleaning to your location. Sign up in seconds and get your vehicle sparkling clean." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <main class="container">
+    <div class="card">
+
+      <!-- Brand Header -->
+      <header class="brand">
+        <div class="brand-row">
+          <img class="brand-icon" src="logo.svg" alt="SaafGaadi logo" />
+          <h1 class="brand-logo">
+            <span class="logo-saaf">Saaf</span><span class="logo-gaadi">Gaadi</span>
+          </h1>
+        </div>
+        <p class="brand-tagline">Premium Car Care at Your Doorstep</p>
+      </header>
+
+      <hr class="divider" />
+
+      <!-- Onboarding Form -->
+      <form class="form" id="onboarding-form" onsubmit="return false;">
+
+        <!-- Full Name -->
+        <div class="form-group">
+          <label class="label" for="full-name">Full Name</label>
+          <input class="input" type="text" id="full-name" name="fullName" placeholder="e.g. xyz" required />
+        </div>
+
+        <!-- Phone Number + Send OTP -->
+        <div class="otp-row">
+          <div class="form-group">
+            <label class="label" for="phone-number">Phone Number</label>
+            <div class="phone-wrapper">
+              <span class="phone-prefix">+91</span>
+              <input class="input phone-input" type="tel" id="phone-number" name="phone" placeholder="xxxxx xxxxx"
+                maxlength="10" required />
+            </div>
+            <p class="phone-error" id="phone-error">Please check the Number</p>
+          </div>
+          <button class="btn-otp" type="button" id="btn-send-otp" onclick="handleSendOTP()">
+            Send OTP
+          </button>
+        </div>
+
+        <!-- OTP Verification -->
+        <div class="otp-section" id="otp-section" style="display: none;">
+          <label class="label">Verify OTP</label>
+          <div class="otp-boxes" id="otp-boxes">
+            <input class="otp-box" type="text" maxlength="1" />
+            <input class="otp-box" type="text" maxlength="1" />
+            <input class="otp-box" type="text" maxlength="1" />
+            <input class="otp-box" type="text" maxlength="1" />
+            <input class="otp-box" type="text" maxlength="1" />
+            <input class="otp-box" type="text" maxlength="1" />
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="form-group">
+          <label class="label" for="address">Address</label>
+          <textarea class="input" id="address" name="address"
+            placeholder="Flat / House No., Building, Street, Area, City — PIN Code" required></textarea>
+        </div>
+
+      </form>
+
+      <!-- Proceed Button -->
+      <button type="button" class="btn-proceed" id="btn-proceed" onclick="handleProceed()">
+        Proceed →
+      </button>
+
+      <!-- Validation Toast -->
+      <div class="toast" id="validation-toast">
+        ⚠️ Please fill all the details first
+      </div>
+
+      <!-- Footer -->
+      <p class="footer">
+        By continuing, you agree to our
+        <a href="#">Terms of Service</a> &amp;
+        <a href="#">Privacy Policy</a>.
+      </p>
+
+    </div>
+  </main>
+
+  <!-- Basic JS -->
+  <script>
+    // OTP box auto-advance
+    var otpBoxes = document.querySelectorAll('.otp-box');
+
+    for (var i = 0; i < otpBoxes.length; i++) {
+      (function (idx) {
+        otpBoxes[idx].addEventListener('input', function () {
+          this.value = this.value.replace(/[^0-9]/g, '').slice(0, 1);
+          if (this.value && idx < otpBoxes.length - 1) {
+            otpBoxes[idx + 1].focus();
+          }
+        });
+
+        otpBoxes[idx].addEventListener('keydown', function (e) {
+          if (e.key === 'Backspace' && !this.value && idx > 0) {
+            otpBoxes[idx - 1].focus();
+          }
+        });
+      })(i);
+    }
+
+    // Phone input — digits only
+    var phoneInput = document.getElementById('phone-number');
+    var phoneError = document.getElementById('phone-error');
+
+    phoneInput.addEventListener('input', function () {
+      phoneInput.value = phoneInput.value.replace(/[^0-9]/g, '').slice(0, 10);
+      phoneError.style.display = 'none';
+    });
+
+    // Send OTP
+    function handleSendOTP() {
+      var btn = document.getElementById('btn-send-otp');
+      var otpSection = document.getElementById('otp-section');
+      otpSection.style.display = 'block';
+      var digits = phoneInput.value.replace(/[^0-9]/g, '');
+
+      if (digits.length !== 10) {
+        phoneError.style.display = 'block';
+        phoneInput.focus();
+        return;
+      }
+
+      phoneError.style.display = 'none';
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+
+      setTimeout(function () {
+        btn.textContent = 'OTP Sent ✓';
+        otpBoxes[0].focus();
+
+        var countdown = 30;
+        var timer = setInterval(function () {
+          countdown--;
+          btn.textContent = 'Resend (' + countdown + 's)';
+          if (countdown <= 0) {
+            clearInterval(timer);
+            btn.textContent = 'Resend OTP';
+            btn.disabled = false;
+          }
+        }, 1000);
+      }, 1200);
+    }
+
+    // Proceed — validate all fields and register user
+    async function handleProceed() {
+      var fullName = document.getElementById('full-name').value.trim();
+      var phoneDigits = phoneInput.value.replace(/[^0-9]/g, '');
+      var address = document.getElementById('address').value.trim();
+
+      var otpFilled = true;
+      for (var i = 0; i < otpBoxes.length; i++) {
+        if (otpBoxes[i].value.trim() === '') {
+          otpFilled = false;
+          break;
+        }
+      }
+
+      if (!fullName || phoneDigits.length !== 10 || !otpFilled || !address) {
+        showToast();
+        return;
+      }
+
+      var phoneNumber = '+91' + phoneDigits;
+
+      // Save to localStorage for dashboard use
+      localStorage.setItem('sg_user_name', fullName);
+      localStorage.setItem('sg_user_phone', phoneNumber);
+      localStorage.setItem('sg_user_address', address);
+
+      // Register user in Supabase via Flask API
+      var btn = document.getElementById('btn-proceed');
+      btn.textContent = 'Saving…';
+      btn.disabled = true;
+
+      try {
+        var response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            full_name: fullName,
+            phone_number: phoneNumber,
+            address: address
+          })
+        });
+
+        var result = await response.json();
+
+        if (!response.ok) {
+          alert('Registration failed: ' + result.error);
+          btn.textContent = 'Proceed →';
+          btn.disabled = false;
+          return;
+        }
+
+        console.log('User registered:', result);
+        window.location.href = '/dashboard';
+
+      } catch (err) {
+        console.error('Network error:', err);
+        alert('Could not connect to server. Make sure Flask is running.');
+        btn.textContent = 'Proceed →';
+        btn.disabled = false;
+      }
+    }
+
+    // Show toast
+    function showToast() {
+      var toast = document.getElementById('validation-toast');
+      toast.style.display = 'block';
+      toast.style.opacity = '1';
+
+      setTimeout(function () {
+        toast.style.opacity = '0';
+        setTimeout(function () {
+          toast.style.display = 'none';
+        }, 400);
+      }, 2500);
+    }
+  </script>
+
+</body>
+
+</html>
