@@ -21,15 +21,22 @@ import os
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
-if not SUPABASE_URL or not SUPABASE_KEY:
-    raise RuntimeError("⚠️  Missing SUPABASE_URL or SUPABASE_KEY environment variables!")
-
 
 # ── App Setup ──
 app = Flask(__name__)
 CORS(app)
 
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+# Lazy init — avoids crash if env vars are missing at import time
+supabase = None
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+
+def _check_supabase():
+    """Return an error response if Supabase is not configured."""
+    if supabase is None:
+        return jsonify({"error": "Supabase is not configured. Set SUPABASE_URL and SUPABASE_KEY in Vercel environment variables."}), 503
+    return None
 
 
 # ── ROUTES ──
@@ -41,6 +48,10 @@ def register_user():
     POST /api/register
     Expects JSON: { "full_name", "phone_number", "address" }
     """
+    err = _check_supabase()
+    if err:
+        return err
+
     data = request.get_json()
 
     if not data:
@@ -98,6 +109,10 @@ def create_booking():
     POST /api/book
     Expects JSON: { "user_name", "phone_number", "service_type" }
     """
+    err = _check_supabase()
+    if err:
+        return err
+
     data = request.get_json()
 
     if not data:
@@ -135,6 +150,10 @@ def get_bookings():
     GET /api/bookings
     Optional query param: ?phone=+919876543210
     """
+    err = _check_supabase()
+    if err:
+        return err
+
     try:
         query = supabase.table("bookings").select("*").order("created_at", desc=True)
 
