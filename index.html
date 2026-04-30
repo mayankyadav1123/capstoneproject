@@ -127,10 +127,9 @@
     });
 
     // Send OTP
-    function handleSendOTP() {
+    async function handleSendOTP() {
       var btn = document.getElementById('btn-send-otp');
       var otpSection = document.getElementById('otp-section');
-      otpSection.style.display = 'block';
       var digits = phoneInput.value.replace(/[^0-9]/g, '');
 
       if (digits.length !== 10) {
@@ -143,7 +142,26 @@
       btn.textContent = 'Sending…';
       btn.disabled = true;
 
-      setTimeout(function () {
+      try {
+        var phoneNumber = '+91' + digits;
+        var response = await fetch('/api/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone_number: phoneNumber })
+        });
+        
+        var result = await response.json();
+        
+        if (!response.ok) {
+           alert('Failed to send OTP: ' + result.error);
+           btn.textContent = 'Send OTP';
+           btn.disabled = false;
+           return;
+        }
+
+        // Show OTP section and alert demo OTP
+        alert(result.message);
+        otpSection.style.display = 'block';
         btn.textContent = 'OTP Sent ✓';
         otpBoxes[0].focus();
 
@@ -157,7 +175,12 @@
             btn.disabled = false;
           }
         }, 1000);
-      }, 1200);
+      } catch (err) {
+        console.error('Network error:', err);
+        alert('Could not connect to server.');
+        btn.textContent = 'Send OTP';
+        btn.disabled = false;
+      }
     }
 
     // Proceed — validate all fields and register user
@@ -167,11 +190,13 @@
       var address = document.getElementById('address').value.trim();
 
       var otpFilled = true;
+      var otp = '';
       for (var i = 0; i < otpBoxes.length; i++) {
         if (otpBoxes[i].value.trim() === '') {
           otpFilled = false;
           break;
         }
+        otp += otpBoxes[i].value.trim();
       }
 
       if (!fullName || phoneDigits.length !== 10 || !otpFilled || !address) {
@@ -198,7 +223,8 @@
           body: JSON.stringify({
             full_name: fullName,
             phone_number: phoneNumber,
-            address: address
+            address: address,
+            otp: otp
           })
         });
 

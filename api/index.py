@@ -60,9 +60,13 @@ def register_user():
     full_name    = data.get("full_name", "").strip()
     phone_number = data.get("phone_number", "").strip()
     address      = data.get("address", "").strip()
+    otp          = data.get("otp", "").strip()
 
-    if not full_name or not phone_number or not address:
-        return jsonify({"error": "full_name, phone_number, and address are required"}), 400
+    if not full_name or not phone_number or not address or not otp:
+        return jsonify({"error": "full_name, phone_number, address, and otp are required"}), 400
+        
+    if otp != "123456":
+        return jsonify({"error": "Invalid OTP. Please use 123456 for this demo."}), 400
 
     try:
         # Check if user already exists (by phone number)
@@ -101,6 +105,20 @@ def register_user():
     except Exception as e:
         print(f"[ERROR] Supabase user registration failed: {e}")
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/send-otp", methods=["POST"])
+def send_otp():
+    """
+    POST /api/send-otp
+    Expects JSON: { "phone_number": "+91..." }
+    """
+    data = request.get_json()
+    if not data or not data.get("phone_number"):
+        return jsonify({"error": "phone_number is required"}), 400
+        
+    # Simulated OTP logic for demo/capstone
+    return jsonify({"message": "OTP sent successfully. Use 123456 for demo.", "demo_otp": "123456"}), 200
 
 
 @app.route("/api/book", methods=["POST"])
